@@ -1,19 +1,235 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Cartel ACRI AR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartel ACRI AR - Model Viewer</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-  </head>
-  <body style="margin:0; background:#111;">
-    <model-viewer src="models/Cartel_acri_fiesta.glb"
-                  ios-src="models/Cartel_acri_fiesta.usdz"
-                  ar
-                  ar-modes="scene-viewer quick-look webxr"
-                  camera-controls
-                  auto-rotate
-                  style="width:100%; height:100vh; background-color: #111;">
-    </model-viewer>
-  </body>
-</html>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #111, #333);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .model-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+        
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: #ffffff00;
+            --progress-bar-color: #4ecdc4;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            background: #ff6b6b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ar-button {
+            background: #4285f4;
+        }
+        
+        .instructions {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature h3 {
+            color: #4ecdc4;
+            margin-top: 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .model-container {
+                height: 50vh;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cartel ACRI AR Experience</h1>
+        <p>Explora nuestro cartel en realidad aumentada</p>
+    </header>
+    
+    <div class="container">
+        <div class="model-container">
+            <model-viewer 
+                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+                alt="Cartel ACRI AR"
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                environment-image="neutral"
+                auto-rotate
+                camera-controls
+                shadow-intensity="1"
+                camera-orbit="0deg 75deg 105%"
+                field-of-view="30deg">
+                
+                <button slot="ar-button" class="ar-button">
+                    Ver en Realidad Aumentada
+                </button>
+                
+                <div id="error-message" style="color: red; display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 10px;">
+                    Error al cargar el modelo. Verifica la ruta del archivo.
+                </div>
+            </model-viewer>
+        </div>
+        
+        <div class="controls">
+            <button id="rotate-toggle">Pausar Rotación</button>
+            <button id="reset-view">Reiniciar Vista</button>
+        </div>
+        
+        <div class="instructions">
+            <h2>Instrucciones:</h2>
+            <p>• Para ver en AR: Haz clic en el botón "Ver en Realidad Aumentada"</p>
+            <p>• En móviles iOS: Necesitas tener la app de Measure instalada para algunas funciones</p>
+            <p>• Puedes rotar, acercar y alejar el modelo con los controles táctiles o del ratón</p>
+            <p>• Si el modelo no se carga, verifica que los archivos .glb y .usdz estén en la carpeta correcta</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>Rotación Automática</h3>
+                <p>El modelo gira automáticamente para una visualización completa desde todos los ángulos.</p>
+            </div>
+            <div class="feature">
+                <h3>Controles Intuitivos</h3>
+                <p>Usa tu ratón o dedo para rotar, hacer zoom y pan para examinar los detalles.</p>
+            </div>
+            <div class="feature">
+                <h3>Realidad Aumentada</h3>
+                <p>Coloca virtualmente el modelo en tu espacio real usando la cámara de tu dispositivo.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>ACRI AR Experience &copy; 2023 - Desarrollado con Model Viewer</p>
+    </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modelViewer = document.querySelector('model-viewer');
+            const rotateToggle = document.getElementById('rotate-toggle');
+            const resetView = document.getElementById('reset-view');
+            
+            // Manejar el error de carga del modelo
+            modelViewer.addEventListener('error', () => {
+                document.getElementById('error-message').style.display = 'block';
+            });
+            
+            // Control de rotación automática
+            rotateToggle.addEventListener('click', () => {
+                if (modelViewer.autoRotate) {
+                    modelViewer.autoRotate = false;
+                    rotateToggle.textContent = 'Activar Rotación';
+                } else {
+                    modelViewer.autoRotate = true;
+                    rotateToggle.textContent = 'Pausar Rotación';
+                }
+            });
+            
+            // Reiniciar vista
+            resetView.addEventListener('click', () => {
+                modelViewer.cameraOrbit = '0deg 75deg 105%';
+                modelViewer.fieldOfView = '30deg';
+            });
+            
+            // Detectar si WebXR/AR está disponible
+            if (!navigator.xr) {
+                const arButton = document.querySelector('.ar-button');
+                arButton.disabled = true;
+                arButton.textContent = 'AR no disponible en tu dispositivo';
+                arButton.style.background = '#999';
+            }
+        });
+    </script>
+</body>
+</html>
