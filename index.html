@@ -10,47 +10,25 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #000;
+            background: #000;
             color: white;
             overflow: hidden;
             position: fixed;
             width: 100%;
             height: 100%;
+            touch-action: manipulation;
         }
         
         model-viewer {
             width: 100%;
             height: 100vh;
             --progress-bar-color: #ff3366;
-        }
-        
-        .ar-prompt {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 16px 24px;
-            border-radius: 24px;
-            font-size: 16px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            animation: pulse 2s infinite;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
+            --progress-bar-height: 5px;
         }
         
         .loading {
@@ -68,6 +46,7 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            text-align: center;
         }
         
         .spinner {
@@ -84,105 +63,144 @@
         }
         
         .error-message {
-            display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 0, 0, 0.8);
+            background: rgba(20, 20, 20, 0.95);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 16px;
             text-align: center;
             z-index: 100;
-            width: 80%;
+            width: 85%;
+            max-width: 400px;
+            border: 1px solid #ff3366;
+            display: none;
         }
         
-        .permission-request {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            z-index: 1000;
-        }
-        
-        .permission-request h2 {
-            margin-bottom: 20px;
+        .error-message h3 {
             color: #ff3366;
+            margin-bottom: 15px;
+            font-size: 22px;
         }
         
-        .permission-request p {
-            margin-bottom: 30px;
+        .error-message p {
+            margin-bottom: 20px;
             line-height: 1.5;
         }
         
-        .grant-button {
+        .error-message ul {
+            text-align: left;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .error-message li {
+            margin-bottom: 8px;
+        }
+        
+        .btn {
             background: #ff3366;
             color: white;
             border: none;
-            padding: 16px 32px;
+            padding: 14px 25px;
             border-radius: 30px;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            display: inline-block;
+            margin: 5px;
         }
         
-        .device-info {
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ff3366;
+            color: #ff3366;
+        }
+        
+        .ar-prompt {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
-            padding: 8px 12px;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
+            z-index: 10;
+            display: none;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .debug-info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
             border-radius: 12px;
             font-size: 12px;
-            backdrop-filter: blur(10px);
+            color: #aaa;
+            z-index: 20;
+            display: none;
         }
         
-        /* iOS specific adjustments */
-        @supports (-webkit-touch-callout: none) {
-            .ar-prompt {
-                bottom: 140px; /* Ajuste para iPhone con notch */
-            }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            z-index: 5;
+            background: rgba(0,0,0,0.5);
+            padding: 8px 20px;
+            border-radius: 0 0 15px 15px;
         }
     </style>
 </head>
 <body>
-    <div class="permission-request" id="permission-request">
-        <h2>Experiencia de Realidad Aumentada</h2>
-        <p>Para ver el cartel ACRI en realidad aumentada, necesitamos acceso a tu cámara.</p>
-        <p>El acceso a la cámara solo se utiliza para mostrar el modelo en tu espacio real.</p>
-        <button class="grant-button" id="grant-button">Permitir acceso a cámara</button>
-    </div>
+    <div class="logo">ACRI AR</div>
     
     <div class="loading" id="loading">
         <div class="spinner"></div>
-        <div>Iniciando cámara...</div>
+        <div>Cargando experiencia AR...</div>
     </div>
     
     <div class="error-message" id="error-message">
-        <h3>Error al cargar</h3>
-        <p id="error-details">No se pudo acceder a la cámara. Asegúrate de permitir el acceso.</p>
+        <h3>Error al cargar el modelo 3D</h3>
+        <p>No se pudo cargar el objeto 3D. Esto puede deberse a:</p>
+        <ul>
+            <li>Los archivos del modelo no están en la carpeta correcta</li>
+            <li>Problemas de conexión a internet</li>
+            <li>El navegador no es compatible con WebGL</li>
+        </ul>
+        <p>Hemos cargado un modelo de ejemplo para que puedas probar la experiencia AR.</p>
+        <button class="btn" id="reload-btn">Reintentar carga</button>
+        <button class="btn btn-outline" id="continue-btn">Usar modelo de ejemplo</button>
     </div>
     
     <div class="ar-prompt" id="ar-prompt">
-        <i class="fas fa-camera"></i> Busca una superficie plana para colocar el cartel
+        Busca una superficie plana para colocar el objeto
     </div>
     
-    <div class="device-info" id="device-info">
-        <span id="device-type">Cargando...</span>
+    <div class="debug-info" id="debug-info">
+        Estado: <span id="status-text">Iniciando...</span>
     </div>
 
     <model-viewer 
-        src="models/Cartel_acri_fiesta.glb"
-        ios-src="models/Cartel_acri_fiesta.usdz"
+        id="model-viewer"
         alt="Cartel ACRI AR"
         ar
         ar-modes="webxr scene-viewer quick-look"
@@ -190,13 +208,11 @@
         auto-rotate
         camera-controls
         shadow-intensity="1"
-        camera-orbit="0deg 75deg 105%"
         field-of-view="30deg"
         ar-scale="fixed"
-        reveal="interaction"
-        id="model-viewer">
+        reveal="interaction">
         
-        <button slot="ar-button" style="display: none;" id="ar-button"></button>
+        <button slot="ar-button" id="ar-button" style="display: none;">Ver en AR</button>
     </model-viewer>
 
     <script>
@@ -204,84 +220,149 @@
             const modelViewer = document.getElementById('model-viewer');
             const loadingElement = document.getElementById('loading');
             const errorMessage = document.getElementById('error-message');
-            const errorDetails = document.getElementById('error-details');
-            const permissionRequest = document.getElementById('permission-request');
-            const grantButton = document.getElementById('grant-button');
             const arPrompt = document.getElementById('ar-prompt');
-            const deviceInfo = document.getElementById('device-info');
-            const deviceType = document.getElementById('device-type');
+            const debugInfo = document.getElementById('debug-info');
+            const statusText = document.getElementById('status-text');
+            const reloadBtn = document.getElementById('reload-btn');
+            const continueBtn = document.getElementById('continue-btn');
             const arButton = document.getElementById('ar-button');
             
-            // Detectar dispositivo
-            function detectDevice() {
-                const userAgent = navigator.userAgent;
-                
-                if (/android/i.test(userAgent)) {
-                    deviceType.textContent = "Android";
-                } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-                    deviceType.textContent = "iOS";
-                } else {
-                    deviceType.textContent = "Navegador no compatible";
-                    errorMessage.style.display = 'block';
-                    errorDetails.textContent = 'Por favor, abre esta página en un dispositivo móvil.';
+            // URLs de modelos - intenta cargar el modelo personalizado primero, luego los de respaldo
+            const MODEL_URLS = [
+                'models/Cartel_acri_fiesta.glb',
+                'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+                'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb'
+            ];
+            
+            const IOS_MODEL_URLS = [
+                'models/Cartel_acri_fiesta.usdz',
+                'https://modelviewer.dev/shared-assets/models/Astronaut.usdz',
+                'https://modelviewer.dev/shared-assets/models/RobotExpressive.usdz'
+            ];
+            
+            let currentModelIndex = 0;
+            let isUsingFallbackModel = false;
+            
+            // Actualizar información de estado
+            function updateStatus(text) {
+                statusText.textContent = text;
+                console.log(text);
+            }
+            
+            // Verificar compatibilidad con WebGL
+            function checkWebGLSupport() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    return !!window.WebGLRenderingContext && 
+                          (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+                } catch (e) {
+                    return false;
                 }
             }
             
-            // Solicitar permisos de cámara
-            grantButton.addEventListener('click', () => {
-                permissionRequest.style.display = 'none';
-                loadingElement.style.display = 'flex';
+            // Cargar modelo
+            function loadModel() {
+                updateStatus("Cargando modelo 3D...");
                 
-                // Iniciar AR
-                setTimeout(() => {
-                    arButton.click();
-                }, 1000);
-            });
-            
-            // Manejar el evento de carga del modelo
-            modelViewer.addEventListener('load', () => {
-                loadingElement.style.display = 'none';
-                console.log('Modelo cargado correctamente');
-            });
-            
-            // Manejar errores de carga del modelo
-            modelViewer.addEventListener('error', (event) => {
-                loadingElement.style.display = 'none';
-                errorMessage.style.display = 'block';
-                
-                // Mensajes de error específicos
-                if (event.detail.statusCode === 404) {
-                    errorDetails.textContent = 'No se encontró el archivo del modelo.';
-                } else {
-                    errorDetails.textContent = `Error: ${event.detail.statusMessage || 'No se pudo cargar el modelo'}`;
+                // Verificar soporte WebGL primero
+                if (!checkWebGLSupport()) {
+                    showError("Tu navegador no soporta WebGL, necesario para visualizar modelos 3D. Actualiza tu navegador o usa un dispositivo más moderno.");
+                    return;
                 }
                 
-                console.error('Error loading model:', event.detail);
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const modelUrls = isIOS ? IOS_MODEL_URLS : MODEL_URLS;
+                
+                if (currentModelIndex >= modelUrls.length) {
+                    showError("No se pudo cargar ningún modelo 3D. Verifica tu conexión a internet.");
+                    return;
+                }
+                
+                const modelUrl = modelUrls[currentModelIndex];
+                updateStatus(`Cargando: ${modelUrl}`);
+                
+                if (isIOS) {
+                    modelViewer.setAttribute('ios-src', modelUrl);
+                } else {
+                    modelViewer.setAttribute('src', modelUrl);
+                }
+                
+                // Forzar la carga del modelo
+                setTimeout(() => {
+                    if (modelViewer.modelIsVisible) {
+                        updateStatus("Modelo cargado correctamente");
+                        loadingElement.style.display = 'none';
+                        arPrompt.style.display = 'flex';
+                    }
+                }, 3000);
+            }
+            
+            // Mostrar error
+            function showError(message) {
+                loadingElement.style.display = 'none';
+                errorMessage.style.display = 'block';
+                updateStatus("Error: " + message);
+            }
+            
+            // Usar modelo de ejemplo
+            function useFallbackModel() {
+                isUsingFallbackModel = true;
+                currentModelIndex = 1; // Usar el primer modelo de ejemplo
+                errorMessage.style.display = 'none';
+                loadingElement.style.display = 'flex';
+                loadModel();
+            }
+            
+            // Event listeners
+            modelViewer.addEventListener('load', () => {
+                updateStatus("Modelo cargado correctamente");
+                loadingElement.style.display = 'none';
+                arPrompt.style.display = 'flex';
+                
+                // Ocultar el prompt después de 8 segundos
+                setTimeout(() => {
+                    arPrompt.style.display = 'none';
+                }, 8000);
             });
             
-            // Ocultar el prompt de AR después de 8 segundos
-            setTimeout(() => {
-                arPrompt.style.display = 'none';
-            }, 8000);
+            modelViewer.addEventListener('error', (event) => {
+                updateStatus("Error cargando modelo: " + (event.detail?.statusMessage || "Error desconocido"));
+                
+                // Intentar con el siguiente modelo
+                currentModelIndex++;
+                
+                if (currentModelIndex === 1) {
+                    // Mostrar mensaje de error después del primer fallo
+                    showError("No se pudo cargar el modelo personalizado. " + 
+                             (event.detail?.statusMessage || ""));
+                } else {
+                    // Intentar cargar el siguiente modelo
+                    setTimeout(loadModel, 1000);
+                }
+            });
             
-            // Inicializar
-            detectDevice();
+            reloadBtn.addEventListener('click', () => {
+                errorMessage.style.display = 'none';
+                loadingElement.style.display = 'flex';
+                currentModelIndex = 0;
+                loadModel();
+            });
             
-            // Si ya tenemos permisos, iniciar directamente
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(() => {
-                        permissionRequest.style.display = 'none';
-                    })
-                    .catch(() => {
-                        // Mostrar la solicitud de permisos
-                        loadingElement.style.display = 'none';
-                    });
+            continueBtn.addEventListener('click', useFallbackModel);
+            
+            // Iniciar la carga del modelo
+            loadModel();
+            
+            // Mostrar información de debug en desarrollo
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                debugInfo.style.display = 'block';
+            }
+            
+            // Detectar si WebXR/AR está disponible
+            if (!navigator.xr) {
+                updateStatus("WebXR no compatible - AR limitado");
             }
         });
     </script>
-    
-    <!-- Font Awesome para iconos -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 </body>
 </html>
