@@ -3,30 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartel ACRI AR - Model Viewer</title>
+    <title>Cartel ACRI AR - GitHub</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #111, #333);
+            box-sizing: border-box;
+        }
+        
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
+            background: linear-gradient(135deg, #1a2a3a, #0d1b2a);
+            color: #e0e0e0;
+            line-height: 1.6;
             overflow-x: hidden;
         }
         
-        header {
+        .github-header {
+            background: linear-gradient(90deg, #24292e, #2d333b);
+            color: white;
+            padding: 15px 0;
             text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         
-        h1 {
-            margin: 0;
-            font-size: 2.2rem;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .github-header h1 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .github-header p {
+            font-size: 16px;
+            margin-top: 8px;
+            opacity: 0.9;
         }
         
         .container {
@@ -35,163 +50,408 @@
             padding: 20px;
         }
         
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .model-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
         .model-container {
-            position: relative;
             width: 100%;
-            height: 70vh;
-            border-radius: 12px;
+            height: 400px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
         }
         
         model-viewer {
             width: 100%;
             height: 100%;
             --poster-color: #ffffff00;
-            --progress-bar-color: #4ecdc4;
+            --progress-bar-color: #58a6ff;
         }
         
         .controls {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
         button {
-            background: #4ecdc4;
+            background: linear-gradient(45deg, #238636, #2ea043);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
+            padding: 14px 22px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
         button:hover {
-            background: #ff6b6b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
         
         .ar-button {
-            background: #4285f4;
+            background: linear-gradient(45deg, #da3633, #f85149);
+        }
+        
+        .info-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .github-card {
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border: 1px solid #30363d;
+        }
+        
+        .github-card h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #58a6ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .instructions {
-            background-color: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .github-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .github-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #21262d;
+            color: #c9d1d9;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+        
+        .github-btn:hover {
+            background: #30363d;
+            color: white;
+            transform: translateY(-2px);
         }
         
         .features {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
+            margin-top: 30px;
         }
         
         .feature {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(22, 27, 34, 0.8);
             padding: 20px;
             border-radius: 10px;
-            width: 300px;
-            text-align: center;
-            backdrop-filter: blur(10px);
+            border: 1px solid #30363d;
         }
         
         .feature h3 {
-            color: #4ecdc4;
-            margin-top: 0;
+            color: #58a6ff;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 30px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #58a6ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 100;
+            width: 80%;
         }
         
         footer {
             text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            background-color: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            margin-top: 50px;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
         }
         
         @media (max-width: 768px) {
-            .model-container {
-                height: 50vh;
+            .main-content {
+                flex-direction: column;
             }
             
-            h1 {
-                font-size: 1.8rem;
+            .model-container {
+                height: 350px;
             }
+            
+            .github-header h1 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .model-container {
+                height: 300px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .github-buttons {
+                flex-direction: column;
+            }
+            
+            .github-btn {
+                justify-content: center;
+            }
+        }
+        
+        /* GitHub theme styles */
+        .github-corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .github-corner svg {
+            fill: #58a6ff;
+            color: #0d1117;
+        }
+        
+        .markdown-body {
+            background: transparent;
+            color: #e0e0e0;
+        }
+        
+        .markdown-body pre {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 16px;
+            overflow: auto;
+            margin: 16px 0;
+            border: 1px solid #30363d;
+        }
+        
+        .markdown-body code {
+            background: rgba(110, 118, 129, 0.4);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Cartel ACRI AR Experience</h1>
-        <p>Explora nuestro cartel en realidad aumentada</p>
+    <a href="https://github.com/your-username/your-repo" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250" style="fill:#58a6ff; color:#0d1117; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
+
+    <header class="github-header">
+        <div class="container">
+            <h1><i class="fab fa-github"></i> ACRI AR Project</h1>
+            <p>Proyecto de Realidad Aumentada para GitHub</p>
+        </div>
     </header>
-    
+
     <div class="container">
-        <div class="model-container">
-            <model-viewer 
-                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-                ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
-                alt="Cartel ACRI AR"
-                ar
-                ar-modes="webxr scene-viewer quick-look"
-                environment-image="neutral"
-                auto-rotate
-                camera-controls
-                shadow-intensity="1"
-                camera-orbit="0deg 75deg 105%"
-                field-of-view="30deg">
-                
-                <button slot="ar-button" class="ar-button">
-                    Ver en Realidad Aumentada
-                </button>
-                
-                <div id="error-message" style="color: red; display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 20px; border-radius: 10px;">
-                    Error al cargar el modelo. Verifica la ruta del archivo.
+        <div class="main-content">
+            <div class="model-section">
+                <div class="model-container">
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <div>Cargando modelo 3D...</div>
+                    </div>
+                    
+                    <div class="error-message" id="error-message">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 32px; margin-bottom: 15px;"></i>
+                        <h3>Error al cargar el modelo</h3>
+                        <p id="error-details">Verifica que los archivos del modelo estén en la carpeta correcta.</p>
+                    </div>
+                    
+                    <model-viewer 
+                        src="models/Cartel_acri_fiesta.glb"
+                        ios-src="models/Cartel_acri_fiesta.usdz"
+                        alt="Cartel ACRI AR"
+                        ar
+                        ar-modes="webxr scene-viewer quick-look"
+                        environment-image="neutral"
+                        auto-rotate
+                        camera-controls
+                        shadow-intensity="1"
+                        camera-orbit="0deg 75deg 105%"
+                        field-of-view="30deg">
+                        
+                        <button slot="ar-button" class="ar-button">
+                            <i class="fas fa-cube"></i> Ver en AR
+                        </button>
+                    </model-viewer>
                 </div>
-            </model-viewer>
-        </div>
-        
-        <div class="controls">
-            <button id="rotate-toggle">Pausar Rotación</button>
-            <button id="reset-view">Reiniciar Vista</button>
-        </div>
-        
-        <div class="instructions">
-            <h2>Instrucciones:</h2>
-            <p>• Para ver en AR: Haz clic en el botón "Ver en Realidad Aumentada"</p>
-            <p>• En móviles iOS: Necesitas tener la app de Measure instalada para algunas funciones</p>
-            <p>• Puedes rotar, acercar y alejar el modelo con los controles táctiles o del ratón</p>
-            <p>• Si el modelo no se carga, verifica que los archivos .glb y .usdz estén en la carpeta correcta</p>
+                
+                <div class="controls">
+                    <button id="rotate-toggle">
+                        <i class="fas fa-pause"></i> Pausar Rotación
+                    </button>
+                    <button id="reset-view">
+                        <i class="fas fa-sync-alt"></i> Reiniciar Vista
+                    </button>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="github-card">
+                    <h2><i class="fab fa-github"></i> Subir a GitHub</h2>
+                    <div class="instructions">
+                        <p>Para subir este proyecto a GitHub Pages y compartirlo:</p>
+                        <ol>
+                            <li>Crea un nuevo repositorio en GitHub</li>
+                            <li>Sube todos los archivos (HTML, modelos 3D, etc.)</li>
+                            <li>Ve a la configuración del repositorio</li>
+                            <li>Habilita GitHub Pages en la sección correspondiente</li>
+                            <li>Selecciona la rama principal (main/master)</li>
+                            <li>¡Tu sitio estará disponible en https://tuusuario.github.io/turepositorio/</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="github-buttons">
+                        <a href="#" class="github-btn">
+                            <i class="far fa-star"></i> Star
+                        </a>
+                        <a href="#" class="github-btn">
+                            <i class="far fa-eye"></i> Watch
+                        </a>
+                        <a href="#" class="github-btn">
+                            <i class="far fa-copy"></i> Fork
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="github-card">
+                    <h2><i class="fas fa-code"></i> Estructura del Proyecto</h2>
+                    <div class="markdown-body">
+                        <p>La estructura de archivos para tu proyecto debe ser:</p>
+                        <pre>
+/ (raíz del repositorio)
+│
+├── index.html (este archivo)
+├── models/
+│   ├── Cartel_acri_fiesta.glb
+│   └── Cartel_acri_fiesta.usdz
+├── images/ (opcional)
+└── README.md (documentación)
+                        </pre>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="features">
             <div class="feature">
-                <h3>Rotación Automática</h3>
-                <p>El modelo gira automáticamente para una visualización completa desde todos los ángulos.</p>
+                <h3><i class="fas fa-mobile-alt"></i> Compatible con Móviles</h3>
+                <p>Funciona perfectamente en dispositivos iOS y Android gracias a Model Viewer.</p>
             </div>
+            
             <div class="feature">
-                <h3>Controles Intuitivos</h3>
-                <p>Usa tu ratón o dedo para rotar, hacer zoom y pan para examinar los detalles.</p>
+                <h3><i class="fas fa-vr-cardboard"></i> Realidad Aumentada</h3>
+                <p>Permite visualizar el modelo 3D en tu espacio mediante AR.</p>
             </div>
+            
             <div class="feature">
-                <h3>Realidad Aumentada</h3>
-                <p>Coloca virtualmente el modelo en tu espacio real usando la cámara de tu dispositivo.</p>
+                <h3><i class="fas fa-cube"></i> Modelos 3D</h3>
+                <p>Soporta formatos GLB para dispositivos generales y USDZ para iOS.</p>
+            </div>
+            
+            <div class="feature">
+                <h3><i class="fas fa-desktop"></i> Responsive</h3>
+                <p>Se adapta a diferentes tamaños de pantalla, desde móviles hasta escritorio.</p>
             </div>
         </div>
     </div>
-    
+
     <footer>
-        <p>ACRI AR Experience &copy; 2023 - Desarrollado con Model Viewer</p>
+        <p>ACRI AR Project &copy; 2023 - Diseñado para GitHub Pages</p>
+        <p>Hecho con <i class="fas fa-heart" style="color: #db61a2;"></i> para la comunidad de desarrollo web</p>
     </footer>
 
     <script>
@@ -199,20 +459,39 @@
             const modelViewer = document.querySelector('model-viewer');
             const rotateToggle = document.getElementById('rotate-toggle');
             const resetView = document.getElementById('reset-view');
+            const loadingElement = document.getElementById('loading');
+            const errorMessage = document.getElementById('error-message');
+            const errorDetails = document.getElementById('error-details');
             
-            // Manejar el error de carga del modelo
-            modelViewer.addEventListener('error', () => {
-                document.getElementById('error-message').style.display = 'block';
+            // Manejar el evento de carga del modelo
+            modelViewer.addEventListener('load', () => {
+                loadingElement.style.display = 'none';
+                console.log('Modelo cargado correctamente');
+            });
+            
+            // Manejar errores de carga del modelo
+            modelViewer.addEventListener('error', (event) => {
+                loadingElement.style.display = 'none';
+                errorMessage.style.display = 'block';
+                
+                // Mensajes de error específicos
+                if (event.detail.statusCode === 404) {
+                    errorDetails.textContent = 'No se encontró el archivo del modelo. Verifica que los archivos .glb y .usdz estén en la carpeta "models".';
+                } else {
+                    errorDetails.textContent = `Error ${event.detail.statusCode}: ${event.detail.statusMessage}`;
+                }
+                
+                console.error('Error loading model:', event.detail);
             });
             
             // Control de rotación automática
             rotateToggle.addEventListener('click', () => {
                 if (modelViewer.autoRotate) {
                     modelViewer.autoRotate = false;
-                    rotateToggle.textContent = 'Activar Rotación';
+                    rotateToggle.innerHTML = '<i class="fas fa-play"></i> Activar Rotación';
                 } else {
                     modelViewer.autoRotate = true;
-                    rotateToggle.textContent = 'Pausar Rotación';
+                    rotateToggle.innerHTML = '<i class="fas fa-pause"></i> Pausar Rotación';
                 }
             });
             
@@ -220,15 +499,29 @@
             resetView.addEventListener('click', () => {
                 modelViewer.cameraOrbit = '0deg 75deg 105%';
                 modelViewer.fieldOfView = '30deg';
+                
+                // Efecto visual de feedback
+                resetView.innerHTML = '<i class="fas fa-check"></i> ¡Listo!';
+                setTimeout(() => {
+                    resetView.innerHTML = '<i class="fas fa-sync-alt"></i> Reiniciar Vista';
+                }, 1500);
             });
             
-            // Detectar si WebXR/AR está disponible
+            // Verificar compatibilidad con AR
             if (!navigator.xr) {
                 const arButton = document.querySelector('.ar-button');
                 arButton.disabled = true;
-                arButton.textContent = 'AR no disponible en tu dispositivo';
-                arButton.style.background = '#999';
+                arButton.innerHTML = '<i class="fas fa-exclamation-triangle"></i> AR no compatible';
+                arButton.style.background = '#6e7681';
             }
+            
+            // Simular datos de GitHub (para la demostración)
+            document.querySelectorAll('.github-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('Esta es una demostración. En un repositorio real, estos botones funcionarían con la API de GitHub.');
+                });
+            });
         });
     </script>
 </body>
